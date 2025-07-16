@@ -1,0 +1,17 @@
+# To initiate test db
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgresdb
+    environment:
+      POSTGRES_USER: tushar
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postv1
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
