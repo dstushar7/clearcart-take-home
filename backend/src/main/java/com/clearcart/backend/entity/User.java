@@ -3,8 +3,6 @@ package com.clearcart.backend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @Entity
 @Table(name = "users")
@@ -19,6 +17,4 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String password;
-
-    // Created_at will be handled by database
 }
