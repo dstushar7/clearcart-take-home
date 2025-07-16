@@ -1,13 +1,21 @@
 type User {
-    id: ID
-    username: String
+    id: ID!
+    username: String!
+}
+
+type AuthResponse {
+    user: User!
+    message: String
 }
 
 type Mutation {
-    register(username: String!, password: String!): User
+    register(username: String!, password: String!): User!
+    login(username: String!, password: String!): AuthResponse!
+    logout: String      # Simple logout mutation to clear session
 }
 
 type Query {
     user(id: ID!): User    # Example query to fetch a user by ID
     users: [User!]!       # Example query to fetch a list of users
+    currentUser: User      # Fetch the currently logged-in user from session
 }
