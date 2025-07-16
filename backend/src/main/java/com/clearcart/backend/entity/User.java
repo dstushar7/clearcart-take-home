@@ -12,7 +12,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -20,5 +20,5 @@ public class User {
     @Column(unique = true, nullable = false)
     private String password;
 
-    private Date createdAt;
+    // Created_at will be handled by database
 }

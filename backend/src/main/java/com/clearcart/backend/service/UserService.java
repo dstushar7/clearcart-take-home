@@ -11,6 +11,14 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User registerUser(String username, String password){
-        return null;
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new IllegalArgumentException("Username '" + username + "' is already taken.");
+        }
+
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setPassword(password);
+
+        return userRepository.save(newUser);
     }
 }
