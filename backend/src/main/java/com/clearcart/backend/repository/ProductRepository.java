@@ -1,7 +1,6 @@
 package com.clearcart.backend.repository;
 
 import com.clearcart.backend.entity.Product;
-import com.clearcart.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
