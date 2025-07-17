@@ -2,7 +2,7 @@ package com.clearcart.backend.config;
 
 import com.clearcart.backend.exceptions.DuplicateUsernameException;
 import com.clearcart.backend.exceptions.InvalidCredentialsException;
-import com.clearcart.backend.exceptions.UserNotFoundException;
+import com.clearcart.backend.exceptions.ResourceNotFoundException;
 import com.clearcart.backend.util.ErrorCode;
 import graphql.ErrorType;
 import graphql.GraphQLError;
@@ -20,7 +20,7 @@ public class GraphQLErrorHandler extends DataFetcherExceptionResolverAdapter {
     @Override
     protected GraphQLError resolveToSingleError(@NonNull Throwable ex, @NonNull DataFetchingEnvironment env) {
         // Map custom exceptions to GraphQLError with specific error types and extensions
-        if (ex instanceof UserNotFoundException) {
+        if (ex instanceof ResourceNotFoundException) {
             return buildError(ErrorCode.USER_NOT_FOUND, ex.getMessage(), env);
         } else if (ex instanceof InvalidCredentialsException) {
             return buildError(ErrorCode.INVALID_CREDENTIALS, ex.getMessage(), env);
