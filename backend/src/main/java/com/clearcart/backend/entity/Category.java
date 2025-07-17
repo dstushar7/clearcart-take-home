@@ -16,7 +16,4 @@ public class Category {
 
     @Column(nullable = false, unique = true, length = 255)
     private String name;
-
-    @ManyToMany(mappedBy = "categories")
-    private Set<Product> products = new HashSet<>();
 }
