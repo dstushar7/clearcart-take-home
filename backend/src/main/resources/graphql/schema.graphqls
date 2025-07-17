@@ -3,19 +3,87 @@ type User {
     username: String!
 }
 
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    priceForRent: Float!
+    priceForSale: Float!
+    owner: User!
+    status: String!
+    categories: [Category!]!
+    createdAt: String!
+    updatedAt: String
+}
+
+type Category {
+    id: ID!
+    name: String!
+}
+
+type Transaction {
+    id: ID!
+    product: Product!
+    actor: User!
+    owner: User!
+    type: String!
+    rentStartDate: String
+    rentEndDate: String
+    totalPrice: Float!
+    createdAt: String!
+}
+
+type UserDashboard {
+    bought: [Product!]!
+    sold: [Product!]!
+    rented: [Product!]!
+    lent: [Product!]!
+}
+
+input ProductInput {
+    name: String!
+    description: String
+    priceForRent: Float!
+    priceForSale: Float!
+    categoryIds: [Int!]
+}
+
+input RentProductInput {
+    productId: Int!
+    rentStartDate: String!
+    rentEndDate: String!
+}
+
+
 type AuthResponse {
     user: User!
     message: String
 }
 
 type Mutation {
+    # Auth mutations
     register(username: String!, password: String!): User!
     login(username: String!, password: String!): AuthResponse!
     logout: String      # Simple logout mutation to clear session
+
+    # Product mutations
+    createProduct(input: ProductInput!): Product!
+    updateProduct(id: ID!, input: ProductInput!): Product!
+    deleteProduct(id: ID!): Boolean!
+    buyProduct(productId: ID!): Product!
+    rentProduct(input: RentProductInput!): Product!
 }
 
 type Query {
+    # Auth queries
     user(id: ID!): User    # Example query to fetch a user by ID
     users: [User!]!       # Example query to fetch a list of users
     currentUser: User      # Fetch the currently logged-in user from session
+
+    # Product queries
+    products: [Product!]!
+    product(id: ID!): Product
+    myProducts: [Product!]!
+    categories: [Category!]!
+    dashboard: UserDashboard!
 }

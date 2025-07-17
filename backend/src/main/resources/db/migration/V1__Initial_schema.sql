@@ -16,7 +16,7 @@ CREATE TABLE products (
                           description TEXT,
                           owner_id INTEGER NOT NULL REFERENCES users(id),
                           status VARCHAR(50) NOT NULL DEFAULT 'AVAILABLE', -- Can be 'AVAILABLE' or 'SOLD'. Renting status is handled in transactions.
-                          price_for_rent DECIMAL(10, 2) NOT NULL,
+                          price_for_rent DECIMAL(10, 2) NOT NULL, -- Rent per day
                           price_for_sale DECIMAL(10, 2) NOT NULL,
                           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                           updated_at TIMESTAMPTZ

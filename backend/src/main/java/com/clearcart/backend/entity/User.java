@@ -3,7 +3,7 @@ package com.clearcart.backend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Data
 @Entity
@@ -20,5 +20,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String password;
 
-    // Created_at will be handled by database
+    @Column(nullable = false, name = "created_at")
+    private OffsetDateTime createdAt;
 }
