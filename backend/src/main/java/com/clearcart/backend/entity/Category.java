@@ -3,6 +3,7 @@ package com.clearcart.backend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -13,9 +14,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 255)
     private String name;
 
     @ManyToMany(mappedBy = "categories")
-    private Set<Product> products;
+    private Set<Product> products = new HashSet<>();
 }

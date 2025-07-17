@@ -3,6 +3,8 @@ package com.clearcart.backend.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.OffsetDateTime;
+
 @Data
 @Entity
 @Table(name = "users")
@@ -17,4 +19,7 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String password;
+
+    @Column(nullable = false, name = "created_at")
+    private OffsetDateTime createdAt;
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -15,24 +16,29 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String status;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "price_for_rent", precision = 10, scale = 2)
     private BigDecimal priceForRent;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "price_for_sale", precision = 10, scale = 2)
     private BigDecimal priceForSale;
 
+    @Column(nullable = false, name = "created_at")
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
     @ManyToMany
@@ -41,6 +47,6 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
 }
