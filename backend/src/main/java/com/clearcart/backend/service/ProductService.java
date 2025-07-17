@@ -17,6 +17,8 @@ import com.clearcart.backend.repository.ProductRepository;
 import com.clearcart.backend.repository.TransactionRepository;
 import com.clearcart.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final TransactionRepository transactionRepository;
@@ -38,24 +41,28 @@ public class ProductService {
 
 
     public Product createProduct(ProductInput input) {
-        User owner = userService.getCurrentUser();
+        try {
+            User owner = userService.getCurrentUser();
 
-        Product product = new Product();
-        product.setName(input.getName());
-        product.setDescription(input.getDescription());
-        product.setPriceForRent(input.getPriceForRent());
-        product.setPriceForSale(input.getPriceForSale());
-        product.setOwner(owner);
-        product.setStatus(ProductStatus.AVAILABLE);
-        product.setCreatedAt(OffsetDateTime.now());
+            Product product = new Product();
+            product.setName(input.getName());
+            product.setDescription(input.getDescription());
+            product.setPriceForRent(input.getPriceForRent());
+            product.setPriceForSale(input.getPriceForSale());
+            product.setOwner(owner);
+            product.setStatus(ProductStatus.AVAILABLE);
+            product.setCreatedAt(OffsetDateTime.now());
 
-        // Add categories if provided
-        if (!input.getCategoryIds().isEmpty()) {
-            Set<Category> categories = categoryRepository.findByIdIn(input.getCategoryIds());
-            product.setCategories(categories);
+            // Add categories if provided
+            if (!input.getCategoryIds().isEmpty()) {
+                Set<Category> categories = categoryRepository.findByIdIn(input.getCategoryIds());
+                product.setCategories(categories);
+            }
+            return productRepository.save(product);
+        } catch (Exception e) {
+            logger.error("An unexpected error occurred while creating product '{}'", input.getName(), e);
+            throw new RuntimeException("Unexpected Error occured");
         }
-
-        return productRepository.save(product);
     }
 
     public Product updateProduct(Integer productId, ProductInput input) {

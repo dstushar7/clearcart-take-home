@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.OffsetDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -39,6 +41,7 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername(username);
         newUser.setPassword(password);
+        newUser.setCreatedAt(OffsetDateTime.now());
 
         return userRepository.save(newUser);
     }
