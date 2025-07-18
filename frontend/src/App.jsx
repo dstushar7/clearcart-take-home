@@ -7,34 +7,42 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 // We will create these page components next
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
-import HomePage from './pages/HomePage';
-
+import MyProductsPage from './pages/MyProductsPage';
+import MainAppLayout from './layouts/MainAppLayout';
+import EditProductPage from './pages/EditProductPage';
 
 function App() {
   return (
-    <AuthProvider>
-        <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Navigate to="/register" replace />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+    <Routes>
+      {/* If a user is logged in, they will be directed to /my-products */}
+      {/* If not, they will be redirected to /login by the ProtectedRoute */}
+      <Route path="/" element={<Navigate to="/my-products" replace />} />
 
-            {/* Protected Routes */}
-            <Route
-                path="/dashboard"
-                element={
-                    <ProtectedRoute>
-                        <DashboardPage />
-                    </ProtectedRoute>
-                }
-            />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
 
-            {/* Add more protected routes here as needed */}
-            {/* <Route path="/products/new" element={<ProtectedRoute> <AddProductPage /> </ProtectedRoute>} /> */}
-
-        </Routes>
-    </AuthProvider>
+      {/* This route is now protected */}
+      <Route
+        path="/my-products"
+        element={
+          <ProtectedRoute>
+            <MainAppLayout>
+              <MyProductsPage />
+            </MainAppLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/products/edit/:productId"
+        element={
+          <ProtectedRoute>
+            <MainAppLayout>
+              <EditProductPage />
+            </MainAppLayout>
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 

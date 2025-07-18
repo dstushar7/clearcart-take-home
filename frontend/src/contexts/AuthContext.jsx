@@ -1,13 +1,16 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useQuery, useMutation, gql } from '@apollo/client';
-import client from '../apolloClient'; // Ensure this path is correct
+import { useQuery, useMutation } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
-// Define GraphQL queries/mutations here for clarity
+// Define the GraphQL queries/mutations right here for simplicity
 const CURRENT_USER_QUERY = gql`
-  query GetCurrentUser {
+  query CurrentUser {
     currentUser {
       id
-      username
+      firstName
+      lastName
+      email
     }
   }
 `;
@@ -18,51 +21,50 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
-// 1. Create the Context
-const AuthContext = createContext();
+// 1. Create the context
+const AuthContext = createContext(null);
 
-// 2. Create the Provider Component
+// 2. Create the provider component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Start as true to check for existing session
+  const navigate = useNavigate();
 
-  // This effect runs on initial app load to check if a session already exists
-  useEffect(() => {
-    client.query({ query: CURRENT_USER_QUERY })
-      .then(({ data }) => {
-        if (data.currentUser) {
-          setUser(data.currentUser);
-        }
-      })
-      .catch(() => {
-        // This is expected if there's no session, so we do nothing.
-        setUser(null);
-      })
-      .finally(() => {
-        setIsLoading(false); // We're done checking
-      });
-  }, []);
-
-  const [logoutUser] = useMutation(LOGOUT_MUTATION, {
-      onCompleted: () => {
-          setUser(null); // Clear user state on the frontend
-          client.resetStore(); // Clear Apollo cache
-      }
+  // Check for current user on initial load
+  const { loading: userLoading } = useQuery(CURRENT_USER_QUERY, {
+    onCompleted: (data) => {
+      setUser(data.currentUser);
+    },
+    onError: () => {
+      setUser(null); // No active session
+    },
   });
 
+  const [logoutUser] = useMutation(LOGOUT_MUTATION, {
+    onCompleted: () => {
+      setUser(null);
+      navigate('/login');
+    },
+  });
 
-  // The "value" is what we provide to all children components
-  const value = {
-    user,
-    setUser, // We provide this so the Login page can set the user
-    isLoading,
-    logout: logoutUser // Provide the logout function
+  // Function to be called from the LoginPage
+  const login = (userData) => {
+    setUser(userData);
   };
+
+  const logout = () => {
+    logoutUser();
+  };
+
+  const value = { user, login, logout, isLoading: userLoading };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// 3. Create a custom hook for easy access to the context
+// 3. Create a custom hook for easy consumption
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 }
