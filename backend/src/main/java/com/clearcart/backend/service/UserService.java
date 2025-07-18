@@ -1,6 +1,7 @@
 package com.clearcart.backend.service;
 
 import com.clearcart.backend.dto.AuthResponse;
+import com.clearcart.backend.dto.RegisterUserInput;
 import com.clearcart.backend.entity.User;
 import com.clearcart.backend.exceptions.BadRequestException;
 import com.clearcart.backend.exceptions.UnauthorizedException;
@@ -18,11 +19,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
 
-    public AuthResponse login(String username, String password) {
-        User user = userRepository.findByUsername(username).orElse(null);
+    public AuthResponse login(String email, String password) {
+        User user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
-            throw new ResourceNotFoundException("User not found: " + username);
+            throw new ResourceNotFoundException("User not found: " + email);
         }
 
         if(!password.equals(user.getPassword())) {
@@ -33,14 +34,16 @@ public class UserService {
         return new AuthResponse(user,"Login Successful");
     }
 
-    public User registerUser(String username, String password){
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new BadRequestException(username+" already exists");
+    public User registerUser(RegisterUserInput input){
+        if (userRepository.findByEmail(input.getEmail()).isPresent()) {
+            throw new BadRequestException(input.getEmail()+" already exists");
         }
 
         User newUser = new User();
-        newUser.setUsername(username);
-        newUser.setPassword(password);
+        newUser.setEmail(input.getEmail());
+        newUser.setFirstName(input.getFirstName());
+        newUser.setLastName(input.getLastName());
+        newUser.setPassword(input.getPassword());
         newUser.setCreatedAt(OffsetDateTime.now());
 
         return userRepository.save(newUser);

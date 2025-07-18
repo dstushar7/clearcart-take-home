@@ -2,6 +2,7 @@ package com.clearcart.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
@@ -14,12 +15,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
+    @Column(unique = true, nullable = false) // This was formerly 'username'
+    private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, name = "created_at")
+    @CreationTimestamp
+    @Column(nullable = false, name = "created_at", updatable = false)
     private OffsetDateTime createdAt;
 }
