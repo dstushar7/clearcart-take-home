@@ -1,6 +1,8 @@
 type User {
     id: ID!
-    username: String!
+    firstName: String!
+    lastName: String!
+    email: String!
 }
 
 type Product {
@@ -40,6 +42,19 @@ type UserDashboard {
     lent: [Product!]!
 }
 
+type AuthResponse {
+    user: User!
+    message: String
+}
+
+
+input RegisterUserInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+}
+
 input ProductInput {
     name: String!
     description: String
@@ -54,16 +69,10 @@ input RentProductInput {
     rentEndDate: String!
 }
 
-
-type AuthResponse {
-    user: User!
-    message: String
-}
-
 type Mutation {
     # Auth mutations
-    register(username: String!, password: String!): User!
-    login(username: String!, password: String!): AuthResponse!
+    register(input: RegisterUserInput!): User!
+    login(email: String!, password: String!): AuthResponse!
     logout: String      # Simple logout mutation to clear session
 
     # Product mutations

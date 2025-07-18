@@ -2,7 +2,7 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: postgresdb
+    container_name: postgresdb1
     environment:
       POSTGRES_USER: tushar
       POSTGRES_PASSWORD: root
