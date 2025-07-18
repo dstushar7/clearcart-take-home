@@ -17,6 +17,7 @@ import com.clearcart.backend.repository.ProductRepository;
 import com.clearcart.backend.repository.TransactionRepository;
 import com.clearcart.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -67,6 +69,8 @@ public class ProductService {
 
     public Product updateProduct(Integer productId, ProductInput input) {
         User currentUser = userService.getCurrentUser();
+        log.info("User ID {} is attempting to update product ID {}", currentUser.getId(), productId);
+
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
@@ -98,6 +102,7 @@ public class ProductService {
 
     public boolean deleteProduct(Integer productId) {
         User currentUser = userService.getCurrentUser();
+        log.info("User ID {} is attempting to delete product ID {}", currentUser.getId(), productId);
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
