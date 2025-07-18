@@ -16,22 +16,15 @@ import {
 import { useMutation } from '@apollo/client';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconAlertCircle } from '@tabler/icons-react';
-
-// Import our updated mutation from the dedicated file
+import AuthLayout from '../layouts/AuthLayout';
 import { REGISTER_MUTATION } from '../api/mutations/authMutations';
 
 function RegisterPage() {
   const navigate = useNavigate();
 
-  // The useMutation hook from Apollo Client.
-  // We provide the mutation and get back a function to call it (registerUser),
-  // along with loading and error states.
   const [registerUser, { loading, error }] = useMutation(REGISTER_MUTATION, {
-    // onCompleted is a callback that runs when the mutation is successful.
-    // This is the perfect place to handle side-effects like navigation.
     onCompleted: (data) => {
       console.log('Registration successful:', data);
-      // After successful registration, send the user to the login page.
       navigate('/login');
     },
     onError: (error) => {
@@ -39,53 +32,53 @@ function RegisterPage() {
     },
   });
 
-  // Mantine's useForm hook handles state, validation, and submission for us.
   const form = useForm({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
       password: '',
+      confirmPassword: '', // <-- 1. ADDED: State for the confirm password field
     },
-    // Define validation rules for each field.
     validate: {
       firstName: (value) => (value.trim().length < 2 ? 'First name must have at least 2 letters' : null),
       lastName: (value) => (value.trim().length < 2 ? 'Last name must have at least 2 letters' : null),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
       password: (value) => (value.length < 6 ? 'Password must be at least 6 characters long' : null),
+      // <-- 2. ADDED: Validation rule for matching passwords
+      confirmPassword: (value, values) =>
+        value !== values.password ? 'Passwords do not match' : null,
     },
   });
 
-  // This function is called when the form is submitted and passes validation.
-  // The 'values' object contains all the form data.
   const handleRegister = (values) => {
+    // <-- 3. MODIFIED: Remove confirmPassword before sending to the API
+    // Our backend API only expects firstName, lastName, email, and password.
+    // We use object destructuring to create a new object without the 'confirmPassword' field.
+    const { confirmPassword, ...inputForApi } = values;
+
     registerUser({
       variables: {
-        // We pass the form values directly into the 'input' variable
-        // that our GraphQL mutation expects.
-        input: values,
+        input: inputForApi,
       },
     });
   };
 
   return (
-    <Center style={{ minHeight: '100vh' }}>
+    <AuthLayout>
       <Paper withBorder shadow="md" p={30} radius="md" style={{ width: 420 }}>
         <Title align="center" order={2} mb="xl">
-          Create Your ClearCart Account
+          Sign Up
         </Title>
 
-        {/* Conditionally render an Alert component if there's a GraphQL error */}
         {error && (
           <Alert icon={<IconAlertCircle size="1rem" />} title="Registration Failed" color="red" withCloseButton mb="md">
             {error.message}
           </Alert>
         )}
 
-        {/* We use Mantine's form handler for submission */}
         <form onSubmit={form.onSubmit(handleRegister)}>
           <Group grow>
-            {/* The ...form.getInputProps() helper connects each input to the form state and validation */}
             <TextInput label="First Name" placeholder="John" required {...form.getInputProps('firstName')} />
             <TextInput label="Last Name" placeholder="Doe" required {...form.getInputProps('lastName')} />
           </Group>
@@ -100,6 +93,15 @@ function RegisterPage() {
             {...form.getInputProps('password')}
           />
 
+          {/* <-- 4. ADDED: The UI for the confirm password input */}
+          <PasswordInput
+            mt="md"
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            required
+            {...form.getInputProps('confirmPassword')}
+          />
+
           <Button fullWidth mt="xl" type="submit" loading={loading}>
             Register
           </Button>
@@ -108,11 +110,11 @@ function RegisterPage() {
         <Text c="dimmed" size="sm" ta="center" mt="md">
           Already have an account?{' '}
           <Anchor component={Link} to="/login" size="sm">
-            Log in here
+            Sign in here
           </Anchor>
         </Text>
       </Paper>
-    </Center>
+    </AuthLayout>
   );
 }
 
