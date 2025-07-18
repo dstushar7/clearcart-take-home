@@ -15,7 +15,8 @@ import {
 } from '@mantine/core';
 import { useMutation } from '@apollo/client';
 import { Link, useNavigate } from 'react-router-dom';
-import { IconAlertCircle } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
+import { IconAlertCircle, IconCheck, IconX } from '@tabler/icons-react';
 import AuthLayout from '../layouts/AuthLayout';
 import { REGISTER_MUTATION } from '../api/mutations/authMutations';
 
@@ -23,11 +24,22 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   const [registerUser, { loading, error }] = useMutation(REGISTER_MUTATION, {
-    onCompleted: (data) => {
-      console.log('Registration successful:', data);
+    onCompleted: () => {
+      notifications.show({
+        title: 'Welcome!',
+        message: 'Your account has been created. Please log in.',
+        color: 'green',
+        icon: <IconCheck size="1.1rem" />,
+      });
       navigate('/login');
     },
     onError: (error) => {
+        notifications.show({
+        title: 'Registration Failed',
+        message: error.message,
+        color: 'red',
+        icon: <IconX size="1.1rem" />,
+        });
       console.error('Registration failed:', error.message);
     },
   });

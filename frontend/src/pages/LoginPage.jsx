@@ -17,9 +17,11 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import AuthLayout from '../layouts/AuthLayout';
 
 import { LOGIN_MUTATION } from '../api/mutations/authMutations';
+import { useAuth } from '../contexts/AuthContext';
 
 
 function LoginPage() {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   // For now, we are just redirecting. In the next step, we will use an AuthContext here.
@@ -28,12 +30,10 @@ function LoginPage() {
   const [loginUser, { loading, error }] = useMutation(LOGIN_MUTATION, {
     onCompleted: (data) => {
       console.log('Login successful:', data.login.user);
-      
-      // TODO: In our next step, we will save the user data to a global context.
-      // For example: login(data.login.user);
+      login(data.login.user); 
 
-      // After successful login, redirect to the homepage.
-      navigate('/'); 
+      // After successful login, redirect to the product-page.
+      navigate('/my-products'); 
     },
     onError: (error) => {
       console.error('Login failed:', error.message);
