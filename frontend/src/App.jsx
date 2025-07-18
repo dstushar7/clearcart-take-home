@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage';
 import MyProductsPage from './pages/MyProductsPage';
 import MainAppLayout from './layouts/MainAppLayout';
 import EditProductPage from './pages/EditProductPage';
+import AddProductPage from './pages/AddProductPage';
 
 function App() {
   return (
@@ -42,6 +43,15 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/add-product" element={
+        <ProtectedRoute>
+          <MainAppLayout>
+            <AddProductPage />
+          </MainAppLayout>
+        </ProtectedRoute>
+      } 
+    />
     </Routes>
   );
 }

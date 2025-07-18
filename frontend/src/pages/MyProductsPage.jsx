@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { MY_PRODUCTS_QUERY } from '../api/queries/productQueries';
 import { DELETE_PRODUCT_MUTATION } from '../api/mutations/productMutations';
@@ -21,6 +22,7 @@ import ProductCard from '../components/ProductCard';
 function MyProductsPage() {
   // We no longer need the `logout` function here; it's handled in the layout.
   const [productToDelete, setProductToDelete] = useState(null);
+  const navigate = useNavigate();
 
   const { data, loading, error, refetch } = useQuery(MY_PRODUCTS_QUERY);
 
@@ -74,7 +76,7 @@ function MyProductsPage() {
         <Text>You haven't added any products yet.</Text>
       )}
 
-      <Button fullWidth size="lg" mt="xl">
+      <Button fullWidth size="lg" mt="xl" onClick={() => navigate('/add-product')}>
         Add Product
       </Button>
 
