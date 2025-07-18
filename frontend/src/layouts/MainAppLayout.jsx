@@ -27,7 +27,7 @@ function MainAppLayout({ children }) {
 
           <Group>
             {user && <Text size="sm">Welcome, {user.firstName}!</Text>}
-            <Button color="red" compact onClick={logout}>
+            <Button color="red" size="xs" onClick={logout}>
               Logout
             </Button>
           </Group>
