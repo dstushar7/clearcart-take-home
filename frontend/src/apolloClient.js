@@ -6,8 +6,10 @@ import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 // This link tells Apollo where our GraphQL server is running.
 // Since our frontend (running in the browser) and backend (exposed by Docker)
 // are both accessible on localhost, we use the backend's exposed port.
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/graphql';
+
 const httpLink = new HttpLink({
-  uri: 'http://localhost:8080/graphql',
+  uri: apiUrl,
   
   // 2. CRITICAL FOR AUTHENTICATION:
   // This tells Apollo Client to include credentials (like cookies) in every request.

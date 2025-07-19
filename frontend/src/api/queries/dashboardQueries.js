@@ -2,44 +2,43 @@
 
 import { gql } from '@apollo/client';
 
+const PRODUCT_CARD_FIELDS = gql`
+  fragment ProductCardFields on Product {
+    id
+    name
+    description
+    status
+    priceForSale
+    priceForRent
+    createdAt
+    categories {
+      id
+      name
+    }
+    owner {
+      id
+      firstName
+    }
+  }
+`;
+
 export const GET_DASHBOARD_DATA = gql`
+  # Include the fragment definition here
+  ${PRODUCT_CARD_FIELDS}
+
   query GetDashboardData {
     dashboard {
       bought {
-        id
-        name
-        description
-        status
-        priceForSale
-        owner {
-          id
-          firstName
-        }
+        ...ProductCardFields
       }
       sold {
-        id
-        name
-        description
-        status
-        priceForSale
+        ...ProductCardFields
       }
       rented {
-        id
-        name
-        description
-        status
-        priceForRent
-        owner {
-          id
-          firstName
-        }
+        ...ProductCardFields
       }
       lent {
-        id
-        name
-        description
-        status
-        priceForRent
+        ...ProductCardFields
       }
     }
   }

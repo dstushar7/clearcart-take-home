@@ -11,7 +11,7 @@ import { Card, Text, Group, Badge } from '@mantine/core';
  * @param {React.ReactNode} footerContent - Optional content to display in the footer, left of actions.
  */
 function ProductCard({ product, onCardClick, actions, footerContent }) {
-  const formattedDate = new Date(Number(product.createdAt)).toLocaleDateString('en-US', {
+  const formattedDate = new Date(product.createdAt).toLocaleDateString('en-US', {
     year: 'numeric', month: 'short', day: 'numeric',
   });
 
