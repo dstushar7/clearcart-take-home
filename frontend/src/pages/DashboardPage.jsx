@@ -38,8 +38,10 @@ const DashboardSection = ({ title, products, emptyMessage, showOwner = false }) 
 );
 
 function DashboardPage() {
-  const { loading, error, data } = useQuery(GET_DASHBOARD_DATA);
-
+  const { loading, error, data } = useQuery(GET_DASHBOARD_DATA, {
+    fetchPolicy: 'cache-and-network',
+  });
+  
   if (loading) {
     return (
       <Center style={{ height: '50vh' }}>
