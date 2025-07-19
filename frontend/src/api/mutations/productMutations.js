@@ -24,3 +24,21 @@ export const CREATE_PRODUCT_MUTATION = gql`
     }
   }
 `;
+
+export const BUY_PRODUCT_MUTATION = gql`
+  mutation BuyProduct($productId: ID!) {
+    buyProduct(productId: $productId) {
+      id
+      status
+    }
+  }
+`;
+
+export const RENT_PRODUCT_MUTATION = gql`
+  mutation RentProduct($input: RentProductInput!) {
+    rentProduct(input: $input) {
+      id
+      status
+    }
+  }
+`;

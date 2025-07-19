@@ -45,3 +45,25 @@ export const GET_CATEGORIES_QUERY = gql`
     }
   }
 `;
+
+export const GET_ALL_PRODUCTS = gql`
+  query GetAllProducts {
+    products {
+      id
+      name
+      description
+      priceForSale
+      priceForRent
+      status
+      createdAt
+      owner {
+        id
+        firstName
+      }
+      categories {
+        id
+        name
+      }
+    }
+  }
+`;
