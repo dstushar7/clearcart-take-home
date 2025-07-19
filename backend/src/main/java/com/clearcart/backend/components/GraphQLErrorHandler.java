@@ -1,4 +1,4 @@
-package com.clearcart.backend.config;
+package com.clearcart.backend.components;
 
 import com.clearcart.backend.exceptions.BadRequestException;
 import com.clearcart.backend.exceptions.UnauthorizedException;
