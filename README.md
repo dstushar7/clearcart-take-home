@@ -61,7 +61,7 @@ docker-compose ps
 Once all services are up and running, you can access the application:
 
 -   **Frontend (ClearCart App):** [http://localhost:5173](http://localhost:5173)
--   **Backend (GraphQL Playground):** [http://localhost:8080/graphiql](http://localhost:8080/graphiql) *(Useful for API testing)*
+-   **Backend (GraphQL Playground):** [http://localhost:8080/graphiql](http://localhost:8080/graphql) *(Useful for API testing)*
 
 ### 3. Stopping the Application
 
