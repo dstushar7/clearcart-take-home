@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: postgres:15
@@ -10,6 +12,7 @@ services:
       - POSTGRES_DB=clearcart
     volumes:
       - clearcart-data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   backend:
     build: ./backend
@@ -21,11 +24,25 @@ services:
       - SPRING_DATASOURCE_USERNAME=clearcart
       - SPRING_DATASOURCE_PASSWORD=clearcart
       - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - ALLOWED_ORIGINS=http://localhost:5173
     depends_on:
       - db
     volumes:
-      # This path MUST match the <property name="LOGS"> value in logback-spring.xml
       - ./logs:/app/logs
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8080/graphql
+    container_name: clearcart-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
 
 volumes:
   clearcart-data:
