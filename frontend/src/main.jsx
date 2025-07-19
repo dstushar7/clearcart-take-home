@@ -9,7 +9,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { AuthProvider } from './contexts/AuthContext';
+
+// --- CSS IMPORTS ---
 import '@mantine/core/styles.css'; 
+import '@mantine/dates/styles.css'; 
+import '@mantine/notifications/styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

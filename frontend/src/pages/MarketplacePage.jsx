@@ -23,8 +23,29 @@ import { IconAlertCircle, IconCheck, IconX } from '@tabler/icons-react';
 import ProductCard from '../components/ProductCard';
 
 // Helper function to format dates to YYYY-MM-DD
-const formatDate = (date) => {
-  return date.toISOString().split('T')[0];
+const formatDate = (dateInput) => {
+  // 1. Handle null or undefined input gracefully
+  if (!dateInput) {
+    return null;
+  }
+
+  // 2. Check if the input is already a Date object
+  if (dateInput instanceof Date) {
+    // If it is, format it directly
+    return dateInput.toISOString().split('T')[0];
+  }
+
+  // 3. If it's not a Date object, try to create one from the input (e.g., from a string)
+  const date = new Date(dateInput);
+
+  // 4. Verify that the new date is valid before trying to format it
+  if (!isNaN(date.getTime())) {
+    return date.toISOString().split('T')[0];
+  }
+
+  // 5. If it's an invalid date, log an error and return null
+  console.error("Failed to format an invalid date:", dateInput);
+  return null;
 };
 
 function MarketplacePage() {
@@ -105,10 +126,23 @@ function MarketplacePage() {
 
   // Effect to calculate rental price dynamically
   useEffect(() => {
-    if (productToRent && rentDates[0] && rentDates[1]) {
+    // Check if both dates are valid Date objects
+    if (productToRent && rentDates[0] instanceof Date && rentDates[1] instanceof Date) {
       const [start, end] = rentDates;
-      const timeDiff = end.getTime() - start.getTime();
-      const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1; // +1 to include start day
+
+      // Ensure the end date is not before the start date
+      if (end < start) {
+        setTotalRentPrice(0);
+        return;
+      }
+      // Normalize dates to the start of the day (midnight) to avoid timezone issues
+      const startOfDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const endOfDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+      const timeDiff = endOfDay.getTime() - startOfDay.getTime();
+
+      // Calculate the number of full days and add 1 because rentals are inclusive
+      const dayDiff = Math.round(timeDiff / (1000 * 60 * 60 * 24)) + 1;
       setTotalRentPrice(dayDiff * productToRent.priceForRent);
     } else {
       setTotalRentPrice(0);
