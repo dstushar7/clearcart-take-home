@@ -1,0 +1,384 @@
+{
+	"info": {
+		"_postman_id": "275d3483-ba8a-4871-a9f7-eb0b1c9c6f8f",
+		"name": "ClearCart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29686750"
+	},
+	"item": [
+		{
+			"name": "AuthResolver",
+			"item": [
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  logout\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  register(input: {\n    firstName: \"Test\",\n    lastName: \"User\",\n    email: \"test.user@example.com\",\n    password: \"password\"\n  }) {\n    id\n    firstName\n    lastName\n    email\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  login(email: \"test.user@example.com\", password: \"password\") {\n    user {\n      id\n      email\n    }\n    message\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Current User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  currentUser {\n    id\n    username\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ProductResolver",
+			"item": [
+				{
+					"name": "Add Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  createProduct(input: { name: \"Samsung S25 Ultra\", description: \"A great product designed and developed by google\", priceForRent: 90.99, priceForSale: 1111.1, categoryIds: [1, 2] }) {\n    id\n    name\n    description\n    priceForRent\n    priceForSale\n    status\n    createdAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  product(id: \"7\") {\n    id\n    name\n    description\n    priceForRent\n    priceForSale\n    status\n    owner {\n      id\n      username\n    }\n    categories {\n      id\n      name\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  products {\n    id\n    name\n    description\n    priceForRent\n    priceForSale\n    status\n    owner {\n      id\n      username\n    }\n    categories {\n      id\n      name\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  myProducts {\n    id\n    name\n    description\n    priceForRent\n    priceForSale\n    status\n    categories {\n      id\n      name\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  updateProduct(id: \"9\", input: { name: \"Updated Product\", description: \"Updated description\", priceForRent: 12.99, priceForSale: 129.99, categoryIds: [1, 3] }) {\n    id\n    name\n    description\n    priceForRent\n    priceForSale\n    status\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  deleteProduct(id: \"9\")\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buy Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  buyProduct(productId: \"7\") {\n    id\n    name\n    description\n    priceForSale\n    status\n    createdAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rent  Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation {\n  rentProduct(input: { productId: 7, rentStartDate: \"2023-11-01\", rentEndDate: \"2023-11-07\" }) {\n    id\n    name\n    description\n    priceForRent\n    status\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AllCategories",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  categories {\n    id\n    name\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dashboard Data",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query {\n  dashboard {\n    bought {\n      id\n      name\n      priceForSale\n      status\n      createdAt\n    }\n    sold {\n      id\n      name\n      priceForSale\n      status\n      createdAt\n    }\n    rented {\n      id\n      name\n      priceForRent\n      status\n      updatedAt\n    }\n    lent {\n      id\n      name\n      priceForRent\n      status\n      updatedAt\n    }\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/graphql",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"graphql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -90,3 +90,8 @@ docker-compose down -v
 ├── docker-compose.yml  # Docker orchestration file
 └── README.md           # This file
 ```
+
+## API Testing
+
+You can use the provided [ClearCart.postman_collection.json](./ClearCart.postman_collection.json) file to test the backend API endpoints via [Postman](https://www.postman.com/).  
+After importing, run requests as needed.
