@@ -5,6 +5,7 @@ import com.clearcart.backend.dto.RegisterUserInput;
 import com.clearcart.backend.entity.User;
 import com.clearcart.backend.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -32,7 +33,7 @@ public class AuthResolver {
     }
 
     @MutationMapping
-    public AuthResponse login(@Argument @NotBlank String email, @Argument @NotBlank String password) {
+    public AuthResponse login(@Argument @NotBlank @Email String email, @Argument @NotBlank String password) {
         return userService.login(email, password);
     }
 

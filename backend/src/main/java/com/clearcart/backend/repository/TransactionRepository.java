@@ -17,6 +17,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> findByActorOrOwner(@Param("user") User user);
 
     @Query("SELECT t FROM Transaction t WHERE t.product.id = :productId AND t.type = 'RENT' " +
-            "AND :date BETWEEN t.rentStartDate AND t.rentEndDate")
-    List<Transaction> findActiveRentals(@Param("productId") Integer productId, @Param("date") LocalDate date);
+            "AND :newStartDate <= t.rentEndDate AND :newEndDate >= t.rentStartDate")
+    List<Transaction> findOverlappingRentals(
+            @Param("productId") Integer productId,
+            @Param("newStartDate") LocalDate newStartDate,
+            @Param("newEndDate") LocalDate newEndDate
+    );
 }

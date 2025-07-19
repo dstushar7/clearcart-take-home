@@ -175,11 +175,14 @@ public class ProductService {
         }
 
         // Check if product is already rented for these dates
-        List<Transaction> existingRentals = transactionRepository.findActiveRentals(
-                input.getProductId(), input.getRentStartDate()
+        List<Transaction> overlappingRentals = transactionRepository.findOverlappingRentals(
+                input.getProductId(),
+                input.getRentStartDate(),
+                input.getRentEndDate()
         );
-        if (!existingRentals.isEmpty()) {
-            throw new BadRequestException("Product is already rented for these dates");
+
+        if (!overlappingRentals.isEmpty()) {
+            throw new BadRequestException("Product is already booked for some or all of the selected dates. Please choose a different period.");
         }
 
         // Calculate rental cost
