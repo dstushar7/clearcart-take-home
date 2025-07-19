@@ -27,7 +27,7 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
-            throw new ResourceNotFoundException("User not found: " + email);
+            throw new ResourceNotFoundException("Email not found: " + email+ ". Please register first.");
         }
 
         if(!password.equals(user.getPassword())) {
