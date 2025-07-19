@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final TransactionRepository transactionRepository;
@@ -62,7 +61,7 @@ public class ProductService {
             }
             return productRepository.save(product);
         } catch (Exception e) {
-            logger.error("An unexpected error occurred while creating product '{}'", input.getName(), e);
+            log.error("An unexpected error occurred while creating product '{}'", input.getName(), e);
             throw new RuntimeException("Unexpected Error occured");
         }
     }
@@ -252,7 +251,12 @@ public class ProductService {
 
 
     public List<Product> getAllAvailableProducts() {
-        return productRepository.findAvailableProducts(ProductStatus.AVAILABLE);
+        User currentUser = userService.getCurrentUser();
+        return productRepository.findAvailableProductsForOtherUsers(
+                ProductStatus.AVAILABLE,
+                currentUser.getId()
+        );
+//        return productRepository.findAvailableProducts(ProductStatus.AVAILABLE);
     }
 
     public Product getProductById(Integer id) {
