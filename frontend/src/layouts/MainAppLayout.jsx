@@ -3,11 +3,28 @@
 import React from 'react';
 import { AppShell, Group, Title, Button, Container, Text } from '@mantine/core';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import classes from './MainAppLayout.module.css';
 
 function MainAppLayout({ children }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const navLinks = [
+    { link: '/my-products', label: 'My Products' },
+    { link: '/dashboard', label: 'Dashboard' },
+    { link: '/marketplace', label: 'Marketplace' },
+  ];
+
+  const items = navLinks.map((item) => (
+    <NavLink
+      to={item.link}
+      key={item.label}
+      className={({ isActive }) => `${classes.link} ${isActive ? classes.linkActive : ''}`}
+    >
+      {item.label}
+    </NavLink>
+  ));
 
   return (
     <AppShell
@@ -24,6 +41,10 @@ function MainAppLayout({ children }) {
           >
             ClearCart
           </Title>
+
+          <Group ml="xl" gap="md" visibleFrom="sm">
+              {items}
+          </Group>
 
           <Group>
             {user && <Text size="sm">Welcome, {user.firstName}!</Text>}

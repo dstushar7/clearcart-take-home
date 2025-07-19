@@ -1,7 +1,6 @@
 // frontend/src/App.jsx
-
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import React from 'react';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 // We will create these page components next
@@ -11,47 +10,38 @@ import MyProductsPage from './pages/MyProductsPage';
 import MainAppLayout from './layouts/MainAppLayout';
 import EditProductPage from './pages/EditProductPage';
 import AddProductPage from './pages/AddProductPage';
+import DashboardPage from './pages/DashboardPage';
+import MarketplacePage from './pages/MarketplacePage';
+
+// Create a new component for our protected layout
+const ProtectedLayout = () => (
+  <ProtectedRoute>
+    <MainAppLayout>
+      <Outlet /> {/* Child routes will render here */}
+    </MainAppLayout>
+  </ProtectedRoute>
+);
 
 function App() {
   return (
     <Routes>
-      {/* If a user is logged in, they will be directed to /my-products */}
-      {/* If not, they will be redirected to /login by the ProtectedRoute */}
-      <Route path="/" element={<Navigate to="/my-products" replace />} />
-
+      {/* Public routes */}
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      {/* This route is now protected */}
-      <Route
-        path="/my-products"
-        element={
-          <ProtectedRoute>
-            <MainAppLayout>
-              <MyProductsPage />
-            </MainAppLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/products/edit/:productId"
-        element={
-          <ProtectedRoute>
-            <MainAppLayout>
-              <EditProductPage />
-            </MainAppLayout>
-          </ProtectedRoute>
-        }
-      />
+      {/* When user hits the base URL, navigate to a default protected page */}
+      <Route path="/" element={<Navigate to="/my-products" replace />} />
+      
+      {/* --- Protected Routes --- */}
+      {/* All routes within this element will be protected and use the MainAppLayout */}
+      <Route element={<ProtectedLayout />}>
+        <Route path="/my-products" element={<MyProductsPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/marketplace" element={<MarketplacePage />} />
+        <Route path="/add-product" element={<AddProductPage />} />
+        <Route path="/products/edit/:productId" element={<EditProductPage />} />
+      </Route>
 
-      <Route path="/add-product" element={
-        <ProtectedRoute>
-          <MainAppLayout>
-            <AddProductPage />
-          </MainAppLayout>
-        </ProtectedRoute>
-      } 
-    />
     </Routes>
   );
 }
